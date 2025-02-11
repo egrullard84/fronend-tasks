@@ -1,8 +1,7 @@
-import { useContext, useState } from "react";
-import { createContext } from "react";
+import { useContext, useState, useEffect, createContext } from "react";
 import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth";
-import { useEffect } from "react";
 import Cookies from "js-cookie";
+
 export const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -32,34 +31,33 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkLogin = async () => {
-     
       const cookies = Cookies.get();
-      if (cookies.token == null) {
+      if (!cookies.token) {
         setIsAuthenticated(false);
-        setLoading(false)
+        setLoading(false);
         return;
       }
 
       try {
         const res = await verifyTokenRequest(cookies.token);
-
-        if (res.data == null) {
-           setIsAuthenticated(false);
-           setLoading(false)
+        if (!res.data) {
+          setIsAuthenticated(false);
+        } else {
+          setIsAuthenticated(true);
+          setUser(res.data);
         }
-        setIsAuthenticated(true);
-        setUser(res.data);
-        setLoading(true)
       } catch (error) {
         setIsAuthenticated(false);
-        setLoading(false)
+      } finally {
+        setLoading(false); // Ahora loading se actualiza correctamente al final
       }
     };
+
     checkLogin();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, signup, signin,loading }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, signup, signin, loading }}>
       {children}
     </AuthContext.Provider>
   );

@@ -5,10 +5,13 @@ import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import { AuthProvider } from "./context/AuthContext";
 import {ProtectedRoute} from "./components/ProtectedRoute";
+import { TaskPage } from "./pages/TaskPage";
+import { TaskProvider } from "./context/TaskContext";
 
 const App = () => {
   return (
     <AuthProvider>
+      <TaskProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
@@ -16,9 +19,11 @@ const App = () => {
           <Route element={<ProtectedRoute />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/tasks" element={<TaskPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
+      </TaskProvider>
     </AuthProvider>
   );
 };
