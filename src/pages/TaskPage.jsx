@@ -21,11 +21,13 @@ export const TaskPage = () => {
     <div>
       <h1>Task Page</h1>
       <TaskForm />
-      <ul>
+      <div>
         {tasks.map((task) => (
-          <li key={task.id}>{task.name}</li>
+          <div key={task.id}>
+            <h2>{task.name}</h2>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

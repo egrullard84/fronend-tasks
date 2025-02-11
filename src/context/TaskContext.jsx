@@ -20,7 +20,6 @@ export const TaskProvider = ({ children }) => {
   };
   const getTasks = async () => {
     const response = await getTasksRequest();
-    console.log(response.data);
     setTasks(response.data);
   };
 
