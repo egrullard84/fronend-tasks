@@ -2,6 +2,7 @@ import { useContext, useState, useEffect, createContext } from "react";
 import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth";
 import Cookies from "js-cookie";
 
+
 export const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -19,15 +20,21 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (user) => {
     const response = await registerRequest(user);
-    setUser(response.data);
+    setUser(response.data.user);
     setIsAuthenticated(true);
   };
 
   const signin = async (user) => {
     const response = await loginRequest(user);
-    setUser(response.data);
+    setUser(response.data.user);
     setIsAuthenticated(true);
   };
+
+  const logout = () => {
+    Cookies.remove("token");
+    setIsAuthenticated(false);
+    setUser(null);
+  }
 
   useEffect(() => {
     const checkLogin = async () => {
@@ -57,7 +64,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, signup, signin, loading }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, signup, signin, loading,logout }}>
       {children}
     </AuthContext.Provider>
   );

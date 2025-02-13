@@ -4,40 +4,46 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
+  const { register, handleSubmit } = useForm();
+  const { signup, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
-    const { register, handleSubmit } = useForm();
-    const { signup,isAutenticated } = useAuth();
-    const navegate = useNavigate();
-  
-    useEffect(()=>{
-      if(isAutenticated) navegate('/home')
-    },[isAutenticated])
-
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/tasks");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
-    <form
-    onSubmit={handleSubmit(async (value) => {
-      signup(value);
-    })}
-  >
-    <input
-      type="text"
-      placeholder="name"
-      {...register("name", { required: true })}
-    />
-    <input
-      type="email"
-      placeholder="email"
-      {...register("email", { required: true })}
-    />
-    <input
-      type="password"
-      placeholder="password"
-      {...register("password", { required: true })}
-    />
-    <button type="submit">register</button>
-  </form>
-  )
-}
+    <div className="form-container">
+    <h2>Register</h2>
+      <form
+        onSubmit={handleSubmit(async (value) => {
+          signup(value);
+        })}
+      >
+        <input
+          type="text"
+          placeholder="name"
+          className="input" 
+          {...register("name", { required: true })}
+        />
+        <input
+          type="email"
+          placeholder="email"
+          className="input" 
+          {...register("email", { required: true })}
+        />
+        <input
+          type="password"
+          placeholder="password"
+          className="input" 
+          {...register("password", { required: true })}
+        />
+        <button type="submit" className="button">register</button>
+      </form>
+    </div>
+  );
+};
 
-export default RegisterForm
+export default RegisterForm;

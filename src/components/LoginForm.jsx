@@ -2,34 +2,41 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import '../components/form.css';
 const LoginForm = () => {
   const { register, handleSubmit } = useForm();
-  const { signin,isAuthenticated } = useAuth();
- const navegate = useNavigate();
+  const { signin, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
-  useEffect(()=>{
-    if(isAuthenticated) navegate("/tasks")  ;
-  },[isAuthenticated])
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/tasks");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
-    <form
-      onSubmit={handleSubmit(async (value) => {
-        signin(value);
-      })}
-    >
-      <input
-        type="email"
-        placeholder="email"
-        {...register("email", { required: true })}
-      />
-      <input
-        type="password"
-        placeholder="password"
-        {...register("password", { required: true })}
-      />
-      <button type="submit">login</button>
-    </form>
+    <div className="form-container">
+       <h2>Iniciar Sesión</h2>
+      <form
+        onSubmit={handleSubmit(async (value) => {
+          signin(value);
+        })}
+      >
+        <input
+          type="email"
+          placeholder="email"
+          className="input" 
+          {...register("email", { required: true })}
+        />
+        <input
+          type="password"
+          placeholder="password"
+          className="input" 
+          {...register("password", { required: true })}
+        />
+        <button type="submit" className="button">login</button>
+      </form>
+    </div>
   );
 };
 

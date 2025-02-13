@@ -1,12 +1,5 @@
-import { useAuth } from "../context/AuthContext"
-
-const HomePage = () => {
-
- const {user}= useAuth();
-  console.log(user)
+export const HomePage = () => {
   return (
     <div>HomePage</div>
   )
 }
-
-export default HomePage

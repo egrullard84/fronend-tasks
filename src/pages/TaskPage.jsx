@@ -1,33 +1,30 @@
-import { TaskForm } from "../components/TaskForm";
-import { useTasks } from "../context/TaskContext";
-import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
+import { useTasks } from "../context/TaskContext";
+import "../components/task.css";
 
-export const TaskPage = () => {
-  const { user, loading } = useAuth();
-  const { getTasksByUser, tasks } = useTasks();
+const TaskPage = () => {
+  const { tasks, getTasks, deleteTask } = useTasks();
 
   useEffect(() => {
-    if (user) {
-      getTasksByUser(user.id);
-    }
-  }, [user]);
-
-  if (loading) {
-    return <p>Cargando...</p>;
-  }
+    getTasks();
+  }, []);
 
   return (
-    <div>
-      <h1>Task Page</h1>
-      <TaskForm />
-      <div>
-        {tasks.map((task) => (
-          <div key={task.id}>
-            <h2>{task.name}</h2>
+    <div className="task-container">
+      {tasks.length === 0 ? (
+        <p className="no-tasks">No hay tareas disponibles</p>
+      ) : (
+        tasks.map((task) => (
+          <div key={task.id} className="task-card">
+            <h2 className="task-title">{task.name}</h2>
+            <button className="delete-btn" onClick={() => deleteTask(task.id)}>
+              Delete
+            </button>
           </div>
-        ))}
-      </div>
+        ))
+      )}
     </div>
   );
 };
+
+export default TaskPage;
