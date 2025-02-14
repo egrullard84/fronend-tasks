@@ -1,7 +1,8 @@
 import axios from "./axios";
 
 export const getTasksRequest = () => axios.get(`tasks`);
-export const getTaskByUserRequest = (id) => axios.get(`/tasks/${id}`);
+export const getTaskByUserRequest = (id) => axios.get(`/tasks/user/${id}`);
+export const getTaskByIdRequest = (id) => axios.get(`/tasks/${id}`);
 export const addTaskRequest = (task) => axios.post(`/tasks`, task);
-export const updateTaskRequest = (task) => axios.put(`/tasks/${task.id}`, task);
+export const updateTaskRequest = (id,task) => axios.put(`/tasks/${id}`, task);
 export const deleteTaskRequest = (id) => axios.delete(`/tasks/${id}`);

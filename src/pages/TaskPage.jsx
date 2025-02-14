@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useTasks } from "../context/TaskContext";
 import "../components/task.css";
+import { Link } from "react-router-dom";
 
 const TaskPage = () => {
   const { tasks, getTasks, deleteTask } = useTasks();
@@ -20,6 +21,8 @@ const TaskPage = () => {
             <button className="delete-btn" onClick={() => deleteTask(task.id)}>
               Delete
             </button>
+            <Link to={`/tasks/${task.id}`} className="edit-btn">Edit</Link>
+    
           </div>
         ))
       )}

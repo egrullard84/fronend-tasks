@@ -4,6 +4,8 @@ import {
   deleteTaskRequest,
   getTaskByUserRequest,
   getTasksRequest,
+  getTaskByIdRequest,
+  updateTaskRequest, // Importar la función de actualización
 } from "../api/task";
 
 const TaskContext = createContext();
@@ -21,22 +23,28 @@ export const TaskProvider = ({ children }) => {
 
   const addTask = async (task) => {
     try {
+      const taskExists = tasks.some(
+        (t) => t.name.trim().toLowerCase() === task.name.trim().toLowerCase()
+      );
+
+      if (taskExists) {
+        alert("⚠️ Ya existe una tarea con ese nombre.");
+        return;
+      }
+
       const response = await addTaskRequest(task);
-      const newTask = { ...response.data}; //s Asigna un ID si falta
-  
-      setTasks((prevTasks) => {
-        // Verifica si la tarea ya existe por ID o nombre
-        if (prevTasks.some((t) => t.id === newTask.id || t.name === newTask.name)) {
-          alert('ya existe una tarea con ese nombre o ID');
-          return;
-        }
-        return [...prevTasks, newTask]; // Agregar solo si es única
-      });
+      const newTask = { ...response.data };
+
+      if (!newTask.id) {
+        console.error("🚨 La API no devolvió un ID para la nueva tarea.");
+        return;
+      }
+
+      setTasks((prevTasks) => [...prevTasks, newTask]);
     } catch (error) {
       console.error("Error al agregar tarea:", error);
     }
   };
-  
 
   const getTasks = async () => {
     try {
@@ -56,6 +64,15 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
+  const getTaskById = async (id) => {
+    try {
+      const response = await getTaskByIdRequest(id);
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener la tarea por ID:", error);
+    }
+  };
+
   const deleteTask = async (id) => {
     try {
       await deleteTaskRequest(id);
@@ -65,9 +82,33 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
+  const updateTask = async (id, updatedTask) => {
+    try {
+  console.log(updatedTask);
+      const response = await updateTaskRequest(id, updatedTask);
+      const updatedTaskData = response.data;
+
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === id ? { ...task, ...updatedTaskData } : task
+        )
+      );
+    } catch (error) {
+      console.error("Error al actualizar tarea:", error);
+    }
+  };
+
   return (
     <TaskContext.Provider
-      value={{ tasks, addTask, deleteTask, getTasks, getTasksByUser }}
+      value={{
+        tasks,
+        addTask,
+        deleteTask,
+        getTasks,
+        getTasksByUser,
+        getTaskById,
+        updateTask, // Agregamos la función de actualización al contexto
+      }}
     >
       {children}
     </TaskContext.Provider>
