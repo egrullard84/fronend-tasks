@@ -13,7 +13,11 @@ export const Navbar = () => {
     <ul className="nav-links">
       {isAuthenticated ? (
         <>
-          <li className="welcome-text">Welcome, {user.name}</li>
+        <li className="welcome-text">
+  Welcome, {user.name}
+  <span className="notification-badge">3</span> {/* Número de notificaciones */}
+</li>
+          
           <li>
             {/*<button className="add-btn">Add Task</button> */}
             <Link to="/add-task" className="add-btn">Add Task</Link>

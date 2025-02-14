@@ -70,3 +70,23 @@
 .logout-btn:hover {
     background-color: black;
 }
+.welcome-text {
+    position: relative;
+    font-weight: bold;
+  }
+  
+  .notification-badge {
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -5px;
+    right: -20px;
+  }

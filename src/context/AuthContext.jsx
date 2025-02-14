@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (user) => {
     const response = await registerRequest(user);
+
     setUser(response.data.user);
     setIsAuthenticated(true);
   };

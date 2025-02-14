@@ -2,12 +2,18 @@ import { useEffect } from "react";
 import { useTasks } from "../context/TaskContext";
 import "../components/task.css";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const TaskPage = () => {
-  const { tasks, getTasks, deleteTask } = useTasks();
+  const { tasks, deleteTask,getTasksByUser } = useTasks();
+  const {user}=  useAuth();
+
 
   useEffect(() => {
-    getTasks();
+    const fetchTasks = async () => {
+      await getTasksByUser(user.id);
+    };
+    fetchTasks();
   }, []);
 
   return (
