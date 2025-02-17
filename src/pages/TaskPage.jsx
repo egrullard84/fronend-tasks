@@ -11,10 +11,10 @@ const TaskPage = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      await getTasksByUser(user.id);
+      if(user) await getTasksByUser(user.id);     
     };
     fetchTasks();
-  }, []);
+  }, [user]);
 
   return (
     <div className="task-container">
@@ -28,6 +28,7 @@ const TaskPage = () => {
               Delete
             </button>
             <Link to={`/tasks/${task.id}`} className="edit-btn">Edit</Link>
+            <Link to={`/shares/${task.id}`} className="share-btn">Share</Link>
     
           </div>
         ))

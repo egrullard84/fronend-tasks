@@ -69,6 +69,10 @@
     color: white;
 }
 
+.share-btn {
+    background-color: #b5b6f7;
+    color: white;
+}
 .edit-btn:hover {
     background-color: #1f7a33;
     transform: scale(1.05);
