@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
 
   const getAllUsers = async () => {
     const response = await getUsersRequest();
-    console.log(response.data);
+    //console.log(response.data);
     setUsers(response.data);
   }
 
