@@ -6,8 +6,8 @@ import { useParams } from "react-router-dom";
 
 export const UserPage = () => {
   const { users, getAllUsers } = useAuth();
-  const { createUserShare, deleteUserShare, shares,setShares} = useShares();
-
+  const { createUserShare, deleteUserShare, shares, setShares, message } =
+    useShares();
   const { taskId } = useParams();
 
   useEffect(() => {
@@ -22,10 +22,10 @@ export const UserPage = () => {
       taskId,
       userId,
     };
-    alert("user added");
     try {
-     const addedShare=  await createUserShare(newShare);
-      setShares([...shares,addedShare]);
+      const addedShare = await createUserShare(newShare);
+    //   await createUserShare(newShare);
+      setShares([...shares, addedShare]);
     } catch (error) {
       console.log(error);
     }
@@ -43,6 +43,7 @@ export const UserPage = () => {
   return (
     <div className="container">
       <h1 className="title">Users</h1>
+      {message}
       <div className="user-list">
         {users.map((user) => (
           <div key={user.id} className="user-card">

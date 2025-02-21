@@ -15,7 +15,7 @@ export const Navbar = () => {
         <>
         <li className="welcome-text">
   Welcome, {user.name}
-  <span className="notification-badge">3</span> {/* Número de notificaciones */}
+  <span className="notification-badge">0</span> {/* Número de notificaciones */}
 </li>
           
           <li>

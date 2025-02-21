@@ -22,10 +22,12 @@ export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
 
   const addTask = async (task) => {
+
+
     try {
-      const taskExists = tasks.some(
+      const taskExists = Array.isArray(tasks) ? tasks.some(
         (t) => t.name.trim().toLowerCase() === task.name.trim().toLowerCase()
-      );
+      ) : false;
 
       if (taskExists) {
         alert("⚠️ Ya existe una tarea con ese nombre.");
@@ -39,8 +41,8 @@ export const TaskProvider = ({ children }) => {
         console.error("🚨 La API no devolvió un ID para la nueva tarea.");
         return;
       }
-
-      setTasks((prevTasks) => [...prevTasks, newTask]);
+     //setTasks((prevTasks) => [...prevTasks, newTask]);
+     setTasks((prevTasks) => Array.isArray(prevTasks) ? [...prevTasks, newTask] : [newTask]);
     } catch (error) {
       console.error("Error al agregar tarea:", error);
     }
@@ -49,7 +51,9 @@ export const TaskProvider = ({ children }) => {
   const getTasks = async () => {
     try {
       const response = await getTasksRequest();
-      setTasks(response.data);
+      console.log(response.data);
+    //  setTasks(response.data);
+    setTasks(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("Error al obtener tareas:", error);
     }
@@ -58,11 +62,27 @@ export const TaskProvider = ({ children }) => {
   const getTasksByUser = async (id) => {
     try {
       const response = await getTaskByUserRequest(id);
-      setTasks(response.data);
+  
+      // Verificar si response.data tiene la estructura correcta
+      if (!response.data || typeof response.data !== "object") {
+        console.error("Error: La API no devolvió un objeto válido", response.data);
+        setTasks({ tasks: [], sharedTasks: [] });
+        return;
+      }
+  
+      // Extraer tareas propias y compartidas
+      const userTasks = Array.isArray(response.data.tasks) ? response.data.tasks : [];
+      const sharedTasks = Array.isArray(response.data.sharedTasks) ? response.data.sharedTasks : [];
+  
+      // Actualizar el estado correctamente
+      setTasks({ tasks: userTasks, sharedTasks: sharedTasks });
     } catch (error) {
       console.error("Error al obtener tareas del usuario:", error);
+      setTasks({ tasks: [], sharedTasks: [] }); // Evita errores en el frontend si la petición falla
     }
   };
+  
+  
 
   const getTaskById = async (id) => {
     try {
@@ -76,7 +96,15 @@ export const TaskProvider = ({ children }) => {
   const deleteTask = async (id) => {
     try {
       await deleteTaskRequest(id);
-      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  
+      setTasks((prevTasks) => {
+        if (!prevTasks || typeof prevTasks !== "object") return { tasks: [], sharedTasks: [] };
+  
+        return {
+          tasks: prevTasks.tasks.filter((task) => task.id !== id), // Filtrar en tareas propias
+          sharedTasks: prevTasks.sharedTasks.filter((task) => task.id !== id), // Filtrar en tareas compartidas
+        };
+      });
     } catch (error) {
       console.error("Error al eliminar tarea:", error);
     }
